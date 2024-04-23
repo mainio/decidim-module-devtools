@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+// This builds the vendorized assets and stores them to `app/packs/src/vendor`.
+// The html-validator needs to be built for the browser environment specifically
+// in order to use it within a browser.
+
+const esbuild = require("esbuild");
+
+const build = async () => {
+  const context = await esbuild.context({
+    logLevel: "info",
+    entryPoints: ["vendor/html-validate.js"],
+    define: {
+      "process": JSON.stringify({ env: { NODE_ENV: "production" } })
+    },
+    bundle: true,
+    platform: "browser",
+    format: "esm",
+    outdir: "app/packs/src/vendor"
+  });
+
+  await context.rebuild();
+  await context.dispose();
+}
+
+build();

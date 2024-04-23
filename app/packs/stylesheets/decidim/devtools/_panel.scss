@@ -1,0 +1,35 @@
+$devtools-panel-background: #fff !default;
+$devtools-panel-border-color: #000 !default;
+
+.devtools-panel{
+  display: none;
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  padding: 10px 0;
+  height: 100%;
+  border-right: 1px solid $devtools-panel-border-color;
+  background-color: $devtools-panel-background;
+  overflow-y: auto;
+
+  &--right{
+    left: auto;
+    right: 0;
+    border-right: 0;
+    border-left: 1px solid $devtools-panel-border-color;
+  }
+
+  .devtools-panel__item{
+    padding: 10px 20px;
+
+    button{
+      text-align: left;
+
+      &[disabled]{
+        cursor: not-allowed;
+      }
+    }
+  }
+}
