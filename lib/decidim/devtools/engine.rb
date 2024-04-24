@@ -15,6 +15,16 @@ module Decidim
           ActiveSupport.on_load(:action_controller) { include Decidim::Devtools::NeedsDevelopmentTools }
         end
       end
+
+      initializer "decidim_devtools.csp" do
+        next unless Decidim.respond_to?(:content_security_policies_extra)
+
+        config.after_initialize do
+          csp = Decidim.content_security_policies_extra
+          csp["connect-src"] ||= []
+          csp["connect-src"] << "https://validator.w3.org"
+        end
+      end
     end
   end
 end

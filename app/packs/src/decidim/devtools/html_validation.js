@@ -1,5 +1,8 @@
 import { StaticConfigLoader, HtmlValidate } from "src/vendor/html-validate";
 import icon from "src/decidim/icon"
+import { isNewDesign } from "src/decidim/devtools/utils";
+
+let REDESIGN = null;
 
 const createFragment = (html) => {
   return document.createRange().createContextualFragment(html);
@@ -9,6 +12,17 @@ const escapeHTML = (text) => {
   let div = document.createElement("div");
   div.innerText = text;
   return div.innerHTML;
+}
+
+const getIcon = (iconName) => {
+  if (REDESIGN) {
+    if (iconName === "check") {
+      return icon("check-fill", { class: "icon w-4 h-4 fill-current" });
+    }
+    return icon("error-warning-fill", { class: "icon w-4 h-4 mr-1 fill-current" })
+  }
+
+  return icon(iconName);
 }
 
 const loader = new StaticConfigLoader({
@@ -166,7 +180,7 @@ const validateDocument = async () => {
     badgeNode.classList.add("devtools-badge--success");
     badgeNode.append(createFragment(`
       <span class="devtools-badge__title">HTML</span>
-      <span class="devtools-badge__info">${icon("check")}</span>
+      <span class="devtools-badge__info">${getIcon("check")}</span>
     `));
     reportNode.append(createFragment(`
       <div class="devtools-panel__item">
@@ -179,7 +193,7 @@ const validateDocument = async () => {
     badgeNode.classList.add("devtools-badge--error");
     badgeNode.append(createFragment(`
       <span class="devtools-badge__title">HTML</span>
-      <span class="devtools-badge__info">${icon("warning")}</span>
+      <span class="devtools-badge__info">${getIcon("warning")}</span>
     `));
     reportNode.append(createFragment(`
       <div class="devtools-panel__item">
@@ -254,6 +268,8 @@ const validateDocument = async () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  REDESIGN = isNewDesign();
+
   if (!document.getElementById("html-validator-report")) {
     const mainContainer = document.querySelector("main") || document.querySelector("[role='main']") || document.body;
     mainContainer.append(createFragment(`

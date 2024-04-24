@@ -31,5 +31,9 @@ $devtools-panel-border-color: #000 !default;
         cursor: not-allowed;
       }
     }
+
+    code{
+      word-wrap: break-word;
+    }
   }
 }
